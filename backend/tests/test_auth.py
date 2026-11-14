@@ -6,6 +6,11 @@ def test_health_check(client):
     data = response.json()
     assert data["status"] == "healthy"
     assert data["database"] == "connected"
+    # Security Headers Verification (OWASP compliance)
+    assert response.headers.get("x-content-type-options") == "nosniff"
+    assert response.headers.get("x-frame-options") == "DENY"
+    assert response.headers.get("referrer-policy") == "strict-origin-when-cross-origin"
+    assert "default-src" in response.headers.get("content-security-policy", "")
 
 # ---------------------------------------------------------------------------
 # Gmail Validation Tests
