@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<testsuites>
+  <testsuite name="SocialOps" tests="1" failures="0" timestamp="2026-10-30T20:26:34.150Z" skipped="0" failure-evaluating="0">
+    <testcase name="SocialOps" classname="testim.io.test" time="4.579" ownedBy="Prathamesh Nehere" ownerEmail="2024000135@mssu.ac.in">
+      <system-out>https://app.testim.io/#/project/usw24R6pnE3OMtY5aq0fVuYs/branch/master/test/11NVzmLudva6tDt1?result-id=PbEAMwu3ytvKvJYz</system-out>
+    </testcase>
+  </testsuite>
+</testsuites>

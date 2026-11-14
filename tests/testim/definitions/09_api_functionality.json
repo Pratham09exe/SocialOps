@@ -1,0 +1,43 @@
+{
+  "suite": "Module 09: FastAPI Backend API Functionality & Integration",
+  "description": "Validates core REST endpoints under /api/v1 including health root, authentication token issuance, clients, tasks, and approvals.",
+  "tests": [
+    {
+      "id": "TESTIM-API-001",
+      "name": "GET / — Backend Health & Service Metadata",
+      "steps": [
+        { "action": "httpRequest", "method": "GET", "url": "http://127.0.0.1:8000/", "expectedStatus": 200, "expectedBodyContains": "SocialOps Enterprise Backend" }
+      ]
+    },
+    {
+      "id": "TESTIM-API-002",
+      "name": "POST /api/v1/auth/login — OAuth2 Password Flow JWT Generation",
+      "steps": [
+        {
+          "action": "httpRequest",
+          "method": "POST",
+          "url": "http://127.0.0.1:8000/api/v1/auth/login",
+          "headers": { "Content-Type": "application/x-www-form-urlencoded" },
+          "body": "username=alex.m%40socialops.agency&password=AdminSecure2026!",
+          "expectedStatus": 200,
+          "expectedBodyContains": "access_token"
+        }
+      ]
+    },
+    {
+      "id": "TESTIM-API-003",
+      "name": "GET /api/v1/clients — Protected Accounts Collection",
+      "steps": [
+        { "action": "httpRequest", "method": "GET", "url": "http://127.0.0.1:8000/api/v1/clients", "auth": "bearer", "expectedStatus": 200 }
+      ]
+    },
+    {
+      "id": "TESTIM-API-004",
+      "name": "GET /api/v1/tasks — Operations Kanban Deliverables",
+      "steps": [
+        { "action": "httpRequest", "method": "GET", "url": "http://127.0.0.1:8000/api/v1/tasks", "auth": "bearer", "expectedStatus": 200 }
+      ]
+    }
+  ]
+}
+

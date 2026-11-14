@@ -1,0 +1,46 @@
+{
+  "suite": "Module 02: Client Management & Onboarding",
+  "description": "Validates the Clients directory, Indian Rupee retainer KPI cards, view toggling, and client onboarding modal.",
+  "tests": [
+    {
+      "id": "TESTIM-CLI-001",
+      "name": "Clients Directory & Rupee MRR KPI Verification",
+      "steps": [
+        { "action": "navigate", "url": "/clients" },
+        { "action": "assertVisible", "selector": "text=Clients & Accounts Directory" },
+        { "action": "assertVisible", "selector": ".kpi-card:has-text('Contracted Monthly Revenue')" },
+        { "action": "assertTextContains", "selector": ".kpi-card:has-text('Contracted Monthly Revenue') .kpi-value", "expected": "₹" }
+      ]
+    },
+    {
+      "id": "TESTIM-CLI-002",
+      "name": "View Mode Switching (Table vs Cards) and Name Filter",
+      "steps": [
+        { "action": "click", "selector": "button:has-text('Cards')" },
+        { "action": "assertVisible", "selector": ".so-card h4" },
+        { "action": "click", "selector": "button:has-text('Table')" },
+        { "action": "assertVisible", "selector": ".so-table th:has-text('CLIENT NAME')" },
+        { "action": "type", "selector": "input[placeholder*='Filter by name or code']", "value": "Kinetix" },
+        { "action": "assertVisible", "selector": ".so-table td:has-text('Kinetix Logistics')" }
+      ]
+    },
+    {
+      "id": "TESTIM-CLI-003",
+      "name": "Onboard Client Account Modal Form Validation & Submission",
+      "steps": [
+        { "action": "click", "selector": "button:has-text('Add Client')" },
+        { "action": "assertVisible", "selector": "text=Onboard New Client Account" },
+        { "action": "assertVisible", "selector": "form label:has-text('Client Business Name')" },
+        { "action": "assertVisible", "selector": "form label:has-text('Package Tier')" },
+        { "action": "assertVisible", "selector": "form label:has-text('Monthly Price (₹)')" },
+        { "action": "type", "selector": "input[placeholder*='Apex Pay Inc']", "value": "Testim Automated Client Ltd" },
+        { "action": "type", "selector": "input[placeholder*='Sarah Jenkins']", "value": "Vikram Seth (Head of Growth)" },
+        { "action": "type", "selector": "textarea[placeholder*='Next-generation fintech platform']", "value": "Automated B2B social campaign validation client." },
+        { "action": "selectOption", "selector": "form select", "value": "Scale" },
+        { "action": "click", "selector": "form button[type='submit']:has-text('Onboard Client')" },
+        { "action": "assertVisible", "selector": "text=Testim Automated Client Ltd" }
+      ]
+    }
+  ]
+}
+

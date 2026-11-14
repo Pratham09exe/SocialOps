@@ -1,0 +1,68 @@
+{
+  "suite": "Module 06: End-to-End Content Approval Workflow",
+  "description": "Complete lifecycle: Employee uploads content deliverable with cloud drive proof -> Staged into review queue -> Client / Lead previews cloud proof -> Client approves or requests revisions -> Status updates system-wide.",
+  "workflow": "Employee uploads content → content link is shared → client previews content → client approves or requests changes → status updates across the platform",
+  "tests": [
+    {
+      "id": "TESTIM-WF-001",
+      "name": "Phase 1: Employee Uploads Content with Cloud Drive Link",
+      "actor": "employee",
+      "steps": [
+        { "action": "navigate", "url": "/login" },
+        { "action": "click", "selector": "button:has-text('Employee')" },
+        { "action": "type", "selector": "input[type='email']", "value": "elena.r@socialflow.co" },
+        { "action": "type", "selector": "input[type='password']", "value": "EmployeeSecure2026!" },
+        { "action": "click", "selector": "button:has-text('Sign in to SocialOps')" },
+        { "action": "navigate", "url": "/submit-content" },
+        { "action": "type", "selector": "input[type='url']", "value": "https://drive.google.com/file/d/1Z8yXwV_WorkflowTestAsset/view" },
+        { "action": "type", "selector": "textarea[placeholder*='Draft the copy']", "value": "Deliverable Workflow Test - Color graded 4K render." },
+        { "action": "click", "selector": "button[type='submit']:has-text('Submit for Review')" },
+        { "action": "assertVisible", "selector": "text=staged successfully into Approval Queue" }
+      ]
+    },
+    {
+      "id": "TESTIM-WF-002",
+      "name": "Phase 2 & 3: Client Previews Cloud Asset Proof & Approves Deliverable",
+      "actor": "client",
+      "steps": [
+        { "action": "navigate", "url": "/login" },
+        { "action": "click", "selector": "button:has-text('Client')" },
+        { "action": "type", "selector": "input[type='email']", "value": "marcus.v@clientbrand.com" },
+        { "action": "type", "selector": "input[type='password']", "value": "ClientSecure2026!" },
+        { "action": "click", "selector": "button:has-text('Sign in to SocialOps')" },
+        { "action": "navigate", "url": "/approvals" },
+        { "action": "assertVisible", "selector": "text=Deliverable Review & Approval Queue" },
+        { "action": "assertVisible", "selector": "a:has-text('Inspect Google Drive Proof')" },
+        { "action": "click", "selector": ".so-card button:has-text('Approve')" },
+        { "action": "assertVisible", "selector": "text=Authorize Deliverable Sign-Off" },
+        { "action": "click", "selector": "button:has-text('Confirm & Approve')" },
+        { "action": "assertNotVisible", "selector": "text=Authorize Deliverable Sign-Off" }
+      ]
+    },
+    {
+      "id": "TESTIM-WF-003",
+      "name": "Phase 4: Client Requests Changes / Revision Loop",
+      "actor": "client",
+      "steps": [
+        { "action": "navigate", "url": "/approvals" },
+        { "action": "click", "selector": ".so-card button:has-text('Request Changes')" },
+        { "action": "assertVisible", "selector": "text=Request Creative Revisions" },
+        { "action": "type", "selector": "textarea", "value": "Please adjust typography pacing in final 3 seconds." },
+        { "action": "click", "selector": "button:has-text('Submit Revision Request')" },
+        { "action": "assertNotVisible", "selector": "text=Request Creative Revisions" }
+      ]
+    },
+    {
+      "id": "TESTIM-WF-004",
+      "name": "Phase 5: Status Synchronization on Task Board & Calendar",
+      "actor": "admin",
+      "steps": [
+        { "action": "navigate", "url": "/tasks" },
+        { "action": "assertVisible", "selector": "text=Operations & Deliverables Kanban" },
+        { "action": "navigate", "url": "/calendar" },
+        { "action": "assertVisible", "selector": "text=Publishing Schedule & Content Calendar" }
+      ]
+    }
+  ]
+}
+

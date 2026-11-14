@@ -1,0 +1,53 @@
+{
+  "suite": "Module 03: Employee Management & Workload Analytics",
+  "description": "Validates the creative staff roster, billable rate calculations in Rupees (₹/hr), department filters, and team capacity planning.",
+  "tests": [
+    {
+      "id": "TESTIM-EMP-001",
+      "name": "Employee Roster & Blended Billable Rate in Rupees",
+      "steps": [
+        { "action": "navigate", "url": "/employees" },
+        { "action": "assertVisible", "selector": "text=Agency Staff & Roster" },
+        { "action": "assertVisible", "selector": ".kpi-card:has-text('Blended Billable Rate')" },
+        { "action": "assertTextContains", "selector": ".kpi-card:has-text('Blended Billable Rate') .kpi-value", "expected": "₹" },
+        { "action": "assertVisible", "selector": ".so-table th:has-text('OPERATIVE')" },
+        { "action": "assertVisible", "selector": ".so-table th:has-text('BILLABLE RATE')" }
+      ]
+    },
+    {
+      "id": "TESTIM-EMP-002",
+      "name": "Department Filtering (Video Editors, Copywriters, Strategists)",
+      "steps": [
+        { "action": "click", "selector": "button:has-text('Video Editors')" },
+        { "action": "assertVisible", "selector": ".so-table td:has-text('Video Editors')" },
+        { "action": "click", "selector": "button:has-text('All Staff')" },
+        { "action": "assertVisible", "selector": ".so-table tbody tr" }
+      ]
+    },
+    {
+      "id": "TESTIM-EMP-003",
+      "name": "Add Agency Team Member Modal Form",
+      "steps": [
+        { "action": "click", "selector": "button:has-text('Add Team Member')" },
+        { "action": "assertVisible", "selector": "text=Add Agency Team Member" },
+        { "action": "assertVisible", "selector": "text=Billable Rate (₹/hr)" },
+        { "action": "type", "selector": "input[placeholder*='Liam Thorne']", "value": "Aakash Sharma" },
+        { "action": "type", "selector": "input[placeholder*='liam.t@socialflow.co']", "value": "aakash.s@socialflow.co" },
+        { "action": "click", "selector": "form button[type='submit']:has-text('Add Team Member')" },
+        { "action": "assertVisible", "selector": "text=Aakash Sharma" }
+      ]
+    },
+    {
+      "id": "TESTIM-EMP-004",
+      "name": "Workload & Capacity Planning Auto-Rebalance Trigger",
+      "steps": [
+        { "action": "navigate", "url": "/workload" },
+        { "action": "assertVisible", "selector": "text=Workload & Capacity Planning" },
+        { "action": "assertVisible", "selector": "button:has-text('Auto-Rebalance Team')" },
+        { "action": "click", "selector": "button:has-text('Auto-Rebalance Team')" },
+        { "action": "assertVisible", "selector": ".so-table tbody tr" }
+      ]
+    }
+  ]
+}
+

@@ -1,0 +1,36 @@
+{
+  "suite": "Module 08: Navigation, Responsive Controls & Form Validations",
+  "description": "Validates sidebar navigation across viewports, dropdown toggles, notifications bell panel, and required form field validation constraints.",
+  "tests": [
+    {
+      "id": "TESTIM-NAV-001",
+      "name": "Header Notifications Bell Toggle & Unread Alert Count",
+      "steps": [
+        { "action": "click", "selector": "button[title='Notifications']" },
+        { "action": "assertVisible", "selector": "h4:has-text('Notifications')" },
+        { "action": "click", "selector": "button[title='Notifications']" },
+        { "action": "assertNotVisible", "selector": "h4:has-text('Notifications')" }
+      ]
+    },
+    {
+      "id": "TESTIM-NAV-002",
+      "name": "System Audit & Activity Log Search",
+      "steps": [
+        { "action": "navigate", "url": "/activity-log" },
+        { "action": "assertVisible", "selector": "text=System Audit & Activity Log" },
+        { "action": "type", "selector": "input[placeholder*='Filter by actor']", "value": "Mercer" },
+        { "action": "assertVisible", "selector": "text=Alex Mercer" }
+      ]
+    },
+    {
+      "id": "TESTIM-NAV-003",
+      "name": "HTML5 Form Required Fields & Input Type Constraints",
+      "steps": [
+        { "action": "navigate", "url": "/submit-content" },
+        { "action": "click", "selector": "button[type='submit']:has-text('Submit for Review')" },
+        { "action": "assertValidity", "selector": "input[type='url']", "valid": false }
+      ]
+    }
+  ]
+}
+

@@ -1,0 +1,18 @@
+{
+  "framework": "Testim.io (@testim/testim-cli v4.193.12)",
+  "executionDate": "2026-11-13T17:34:17.924Z",
+  "durationSeconds": 9.73,
+  "services": {
+    "backend": "ONLINE",
+    "frontend": "ONLINE"
+  },
+  "testimConfiguration": {
+    "projectIdConfigured": true,
+    "tokenConfigured": true,
+    "grid": "Testim-HA-Grid",
+    "baseUrl": "http://localhost:5173"
+  },
+  "exitCode": 1,
+  "outcome": "FAILED",
+  "reason": "CLI execution finished."
+}

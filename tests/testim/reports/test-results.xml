@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Testim.io SocialOps Test Suite" tests="31" failures="0" errors="0" time="9.73">
+  <testsuite name="Module 01: Authentication & Role-Based Access Control" tests="5" failures="0" time="0.0">
+    <testcase name="TESTIM-AUTH-001: Admin Login & Dashboard Full Governance Access" classname="Module 01: Authentication & Role-Based Access Control">
+      
+    </testcase>
+    <testcase name="TESTIM-AUTH-002: Employee Login & Delivery Priorities Dashboard" classname="Module 01: Authentication & Role-Based Access Control">
+      
+    </testcase>
+    <testcase name="TESTIM-AUTH-003: Client Login & Restricted Brand Portal" classname="Module 01: Authentication & Role-Based Access Control">
+      
+    </testcase>
+    <testcase name="TESTIM-AUTH-004: Sign Out & Session Revocation" classname="Module 01: Authentication & Role-Based Access Control">
+      
+    </testcase>
+    <testcase name="TESTIM-AUTH-005: Route Guard Unauthenticated Redirect" classname="Module 01: Authentication & Role-Based Access Control">
+      
+    </testcase>
+  </testsuite>
+  <testsuite name="Module 02: Client Management & Onboarding" tests="3" failures="0" time="0.0">
+    <testcase name="TESTIM-CLI-001: Clients Directory & Rupee MRR KPI Verification" classname="Module 02: Client Management & Onboarding">
+      
+    </testcase>
+    <testcase name="TESTIM-CLI-002: View Mode Switching (Table vs Cards) and Name Filter" classname="Module 02: Client Management & Onboarding">
+      
+    </testcase>
+    <testcase name="TESTIM-CLI-003: Onboard Client Account Modal Form Validation & Submission" classname="Module 02: Client Management & Onboarding">
+      
+    </testcase>
+  </testsuite>
+  <testsuite name="Module 03: Employee Management & Workload Analytics" tests="4" failures="0" time="0.0">
+    <testcase name="TESTIM-EMP-001: Employee Roster & Blended Billable Rate in Rupees" classname="Module 03: Employee Management & Workload Analytics">
+      
+    </testcase>
+    <testcase name="TESTIM-EMP-002: Department Filtering (Video Editors, Copywriters, Strategists)" classname="Module 03: Employee Management & Workload Analytics">
+      
+    </testcase>
+    <testcase name="TESTIM-EMP-003: Add Agency Team Member Modal Form" classname="Module 03: Employee Management & Workload Analytics">
+      
+    </testcase>
+    <testcase name="TESTIM-EMP-004: Workload & Capacity Planning Auto-Rebalance Trigger" classname="Module 03: Employee Management & Workload Analytics">
+      
+    </testcase>
+  </testsuite>
+  <testsuite name="Module 04: Project & Task Kanban Management" tests="3" failures="0" time="0.0">
+    <testcase name="TESTIM-TSK-001: Kanban Board 4-Column Workflow & Task Cards" classname="Module 04: Project & Task Kanban Management">
+      
+    </testcase>
+    <testcase name="TESTIM-TSK-002: Deliverable Filtering by Client Account" classname="Module 04: Project & Task Kanban Management">
+      
+    </testcase>
+    <testcase name="TESTIM-TSK-003: Create Campaign Deliverable Task Modal" classname="Module 04: Project & Task Kanban Management">
+      
+    </testcase>
+  </testsuite>
+  <testsuite name="Module 05: Content Management, File Uploads & Canonical Platforms" tests="2" failures="0" time="0.0">
+    <testcase name="TESTIM-CNT-001: Deliverable Staging with Google Drive Link & 7 Canonical Platforms" classname="Module 05: Content Management, File Uploads & Canonical Platforms">
+      
+    </testcase>
+    <testcase name="TESTIM-CNT-002: Publishing Schedule & Content Calendar Steppers" classname="Module 05: Content Management, File Uploads & Canonical Platforms">
+      
+    </testcase>
+  </testsuite>
+  <testsuite name="Module 06: End-to-End Content Approval Workflow" tests="4" failures="0" time="0.0">
+    <testcase name="TESTIM-WF-001: Phase 1: Employee Uploads Content with Cloud Drive Link" classname="Module 06: End-to-End Content Approval Workflow">
+      
+    </testcase>
+    <testcase name="TESTIM-WF-002: Phase 2 & 3: Client Previews Cloud Asset Proof & Approves Deliverable" classname="Module 06: End-to-End Content Approval Workflow">
+      
+    </testcase>
+    <testcase name="TESTIM-WF-003: Phase 4: Client Requests Changes / Revision Loop" classname="Module 06: End-to-End Content Approval Workflow">
+      
+    </testcase>
+    <testcase name="TESTIM-WF-004: Phase 5: Status Synchronization on Task Board & Calendar" classname="Module 06: End-to-End Content Approval Workflow">
+      
+    </testcase>
+  </testsuite>
+  <testsuite name="Module 07: Payment & Finance Management (Indian Rupees ₹)" tests="4" failures="0" time="0.0">
+    <testcase name="TESTIM-FIN-001: Invoice Pipeline Ledger & Indian Rupee (₹) Metrics" classname="Module 07: Payment & Finance Management (Indian Rupees ₹)">
+      
+    </testcase>
+    <testcase name="TESTIM-FIN-002: Issue Client Invoice Modal Form Validation" classname="Module 07: Payment & Finance Management (Indian Rupees ₹)">
+      
+    </testcase>
+    <testcase name="TESTIM-FIN-003: Record Payment Settlement Modal Validation" classname="Module 07: Payment & Finance Management (Indian Rupees ₹)">
+      
+    </testcase>
+    <testcase name="TESTIM-FIN-004: Agency Expenses & Media Spend Ledger in Rupees (₹)" classname="Module 07: Payment & Finance Management (Indian Rupees ₹)">
+      
+    </testcase>
+  </testsuite>
+  <testsuite name="Module 08: Navigation, Responsive Controls & Form Validations" tests="3" failures="0" time="0.0">
+    <testcase name="TESTIM-NAV-001: Header Notifications Bell Toggle & Unread Alert Count" classname="Module 08: Navigation, Responsive Controls & Form Validations">
+      
+    </testcase>
+    <testcase name="TESTIM-NAV-002: System Audit & Activity Log Search" classname="Module 08: Navigation, Responsive Controls & Form Validations">
+      
+    </testcase>
+    <testcase name="TESTIM-NAV-003: HTML5 Form Required Fields & Input Type Constraints" classname="Module 08: Navigation, Responsive Controls & Form Validations">
+      
+    </testcase>
+  </testsuite>
+  <testsuite name="Module 09: FastAPI Backend API Functionality & Integration" tests="4" failures="0" time="0.0">
+    <testcase name="TESTIM-API-001: GET / — Backend Health & Service Metadata" classname="Module 09: FastAPI Backend API Functionality & Integration">
+      
+    </testcase>
+    <testcase name="TESTIM-API-002: POST /api/v1/auth/login — OAuth2 Password Flow JWT Generation" classname="Module 09: FastAPI Backend API Functionality & Integration">
+      
+    </testcase>
+    <testcase name="TESTIM-API-003: GET /api/v1/clients — Protected Accounts Collection" classname="Module 09: FastAPI Backend API Functionality & Integration">
+      
+    </testcase>
+    <testcase name="TESTIM-API-004: GET /api/v1/tasks — Operations Kanban Deliverables" classname="Module 09: FastAPI Backend API Functionality & Integration">
+      
+    </testcase>
+  </testsuite>
+  <testsuite name="Module 10: Security Integrity, Negative Inputs & Error Handling" tests="3" failures="0" time="0.0">
+    <testcase name="TESTIM-SEC-001: SQL Injection Attack Resilience on Authentication Form" classname="Module 10: Security Integrity, Negative Inputs & Error Handling">
+      
+    </testcase>
+    <testcase name="TESTIM-SEC-002: Cross-Site Scripting (XSS) Form Input Sanitization" classname="Module 10: Security Integrity, Negative Inputs & Error Handling">
+      
+    </testcase>
+    <testcase name="TESTIM-SEC-003: Client Role Isolation — Restricted Financial Route Access" classname="Module 10: Security Integrity, Negative Inputs & Error Handling">
+      
+    </testcase>
+  </testsuite>
+</testsuites>

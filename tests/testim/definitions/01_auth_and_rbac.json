@@ -1,0 +1,77 @@
+{
+  "suite": "Module 01: Authentication, Dashboard Views & Role-Based Access Control",
+  "description": "Validates Admin, Employee, and Client persona authentication, role redirection, and route guards.",
+  "tests": [
+    {
+      "id": "TESTIM-AUTH-001",
+      "name": "Admin Login & Dashboard Full Governance Access",
+      "role": "admin",
+      "steps": [
+        { "action": "navigate", "url": "/login" },
+        { "action": "click", "selector": "[data-testid='role-tab-admin']" },
+        { "action": "type", "selector": "[data-testid='email-input']", "value": "alex.m@socialops.agency" },
+        { "action": "type", "selector": "[data-testid='password-input']", "value": "AdminSecure2026!" },
+        { "action": "click", "selector": "[data-testid='login-submit-btn']" },
+        { "action": "assertUrl", "expected": "/" },
+        { "action": "assertVisible", "selector": "text=Agency Operations Overview" },
+        { "action": "assertVisible", "selector": "aside a[href='/clients']" },
+        { "action": "assertVisible", "selector": "aside a[href='/employees']" },
+        { "action": "assertVisible", "selector": "aside a[href='/invoices']" },
+        { "action": "assertVisible", "selector": "aside a[href='/expenses']" }
+      ]
+    },
+    {
+      "id": "TESTIM-AUTH-002",
+      "name": "Employee Login & Delivery Priorities Dashboard",
+      "role": "employee",
+      "steps": [
+        { "action": "navigate", "url": "/login" },
+        { "action": "click", "selector": "[data-testid='role-tab-employee']" },
+        { "action": "type", "selector": "[data-testid='email-input']", "value": "elena.r@socialflow.co" },
+        { "action": "type", "selector": "[data-testid='password-input']", "value": "EmployeeSecure2026!" },
+        { "action": "click", "selector": "[data-testid='login-submit-btn']" },
+        { "action": "assertUrl", "expected": "/" },
+        { "action": "assertVisible", "selector": "text=My Priorities & Assigned Work" },
+        { "action": "assertVisible", "selector": "aside a[href='/tasks']" },
+        { "action": "assertVisible", "selector": "aside a[href='/approvals']" }
+      ]
+    },
+    {
+      "id": "TESTIM-AUTH-003",
+      "name": "Client Login & Restricted Brand Portal",
+      "role": "client",
+      "steps": [
+        { "action": "navigate", "url": "/login" },
+        { "action": "click", "selector": "[data-testid='role-tab-client']" },
+        { "action": "type", "selector": "[data-testid='email-input']", "value": "marcus.v@clientbrand.com" },
+        { "action": "type", "selector": "[data-testid='password-input']", "value": "ClientSecure2026!" },
+        { "action": "click", "selector": "[data-testid='login-submit-btn']" },
+        { "action": "assertUrl", "expected": "/" },
+        { "action": "assertVisible", "selector": "text=Brand Workspace & Content Portal" },
+        { "action": "assertNotVisible", "selector": "aside a[href='/employees']" },
+        { "action": "assertNotVisible", "selector": "aside a[href='/expenses']" },
+        { "action": "assertNotVisible", "selector": "aside a[href='/workload']" }
+      ]
+    },
+    {
+      "id": "TESTIM-AUTH-004",
+      "name": "Sign Out & Session Revocation",
+      "role": "admin",
+      "steps": [
+        { "action": "click", "selector": "[data-testid='logout-btn']" },
+        { "action": "assertUrl", "expected": "/login" },
+        { "action": "assertVisible", "selector": "text=Sign in to your agency management workspace" }
+      ]
+    },
+    {
+      "id": "TESTIM-AUTH-005",
+      "name": "Route Guard Unauthenticated Redirect",
+      "role": "unauthenticated",
+      "steps": [
+        { "action": "clearSession" },
+        { "action": "navigate", "url": "/clients" },
+        { "action": "assertUrl", "expected": "/login" }
+      ]
+    }
+  ]
+}

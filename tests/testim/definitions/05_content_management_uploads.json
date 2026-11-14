@@ -1,0 +1,36 @@
+{
+  "suite": "Module 05: Content Management, File Uploads & Canonical Platforms",
+  "description": "Validates deliverable staging with Google Drive proof links, canonical 7 social platform enforcement, and metadata drafting.",
+  "tests": [
+    {
+      "id": "TESTIM-CNT-001",
+      "name": "Deliverable Staging with Google Drive Link & 7 Canonical Platforms",
+      "steps": [
+        { "action": "navigate", "url": "/submit-content" },
+        { "action": "assertVisible", "selector": "text=Submit Creative Deliverable" },
+        { "action": "assertVisible", "selector": "text=Google Drive Proof URL" },
+        { "action": "type", "selector": "input[type='url']", "value": "https://drive.google.com/file/d/1Z8yXwV_TestimDeliverableProof/view" },
+        { "action": "type", "selector": "textarea[placeholder*='Draft the copy']", "value": "Exclusive product release teaser cut for multi-channel syndication." },
+        { "action": "type", "selector": "input[placeholder*='#BrandCampaign']", "value": "#TestimAutomation #SocialOps #Campaign2026" },
+        { "action": "click", "selector": "button[type='submit']:has-text('Submit for Review')" },
+        { "action": "assertVisible", "selector": "text=staged successfully into Approval Queue" }
+      ]
+    },
+    {
+      "id": "TESTIM-CNT-002",
+      "name": "Publishing Schedule & Content Calendar Steppers",
+      "steps": [
+        { "action": "navigate", "url": "/calendar" },
+        { "action": "assertVisible", "selector": "text=Publishing Schedule & Content Calendar" },
+        { "action": "assertVisible", "selector": "button[title='Previous Month']" },
+        { "action": "assertVisible", "selector": "button[title='Next Month']" },
+        { "action": "assertVisible", "selector": "button:has-text('Today')" },
+        { "action": "click", "selector": "button:has-text('Week')" },
+        { "action": "assertVisible", "selector": ".so-card" },
+        { "action": "click", "selector": "button:has-text('List')" },
+        { "action": "assertVisible", "selector": ".so-table th:has-text('TITLE / DELIVERABLE')" }
+      ]
+    }
+  ]
+}
+

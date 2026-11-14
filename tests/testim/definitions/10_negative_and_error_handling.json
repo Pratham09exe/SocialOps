@@ -1,0 +1,46 @@
+{
+  "suite": "Module 10: Security Integrity, Negative Inputs & Error Handling",
+  "description": "Validates SQL injection prevention on authentication fields, XSS string escaping on client input forms, and client persona route boundary isolation.",
+  "tests": [
+    {
+      "id": "TESTIM-SEC-001",
+      "name": "SQL Injection Attack Resilience on Authentication Form",
+      "steps": [
+        { "action": "navigate", "url": "/login" },
+        { "action": "type", "selector": "input[type='email']", "value": "admin'--@socialops.agency" },
+        { "action": "type", "selector": "input[type='password']", "value": "password123" },
+        { "action": "click", "selector": "button:has-text('Sign in to SocialOps')" },
+        { "action": "assertUrl", "expected": "/login" },
+        { "action": "assertVisible", "selector": "text=/Invalid email or password|Authentication failed/i" }
+      ]
+    },
+    {
+      "id": "TESTIM-SEC-002",
+      "name": "Cross-Site Scripting (XSS) Form Input Sanitization",
+      "steps": [
+        { "action": "navigate", "url": "/clients" },
+        { "action": "click", "selector": "button:has-text('Add Client')" },
+        { "action": "type", "selector": "input[placeholder*='Apex Pay Inc']", "value": "<script>alert('XSS')</script> XSS Test" },
+        { "action": "type", "selector": "input[placeholder*='Sarah Jenkins']", "value": "Security Auditor" },
+        { "action": "click", "selector": "button[type='submit']:has-text('Onboard Client')" },
+        { "action": "assertVisible", "selector": "text=<script>alert('XSS')</script> XSS Test" }
+      ]
+    },
+    {
+      "id": "TESTIM-SEC-003",
+      "name": "Client Role Isolation — Restricted Financial Route Access",
+      "steps": [
+        { "action": "navigate", "url": "/login" },
+        { "action": "click", "selector": "button:has-text('Client')" },
+        { "action": "type", "selector": "input[type='email']", "value": "marcus.v@clientbrand.com" },
+        { "action": "type", "selector": "input[type='password']", "value": "ClientSecure2026!" },
+        { "action": "click", "selector": "button:has-text('Sign in to SocialOps')" },
+        { "action": "assertUrl", "expected": "/" },
+        { "action": "assertNotVisible", "selector": "aside a[href='/expenses']" },
+        { "action": "assertNotVisible", "selector": "aside a[href='/employees']" },
+        { "action": "assertNotVisible", "selector": "aside a[href='/workload']" }
+      ]
+    }
+  ]
+}
+

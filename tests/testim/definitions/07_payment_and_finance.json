@@ -1,0 +1,59 @@
+{
+  "suite": "Module 07: Payment & Finance Management (Indian Rupees ₹)",
+  "description": "Validates accounts receivable invoices, payment settlements, operational expenses ledger, and Rupee (₹) standardization.",
+  "tests": [
+    {
+      "id": "TESTIM-FIN-001",
+      "name": "Invoice Pipeline Ledger & Indian Rupee (₹) Metrics",
+      "steps": [
+        { "action": "navigate", "url": "/invoices" },
+        { "action": "assertVisible", "selector": "text=Invoice Pipeline & Ledger" },
+        { "action": "assertVisible", "selector": ".kpi-card:has-text('Total Billed')" },
+        { "action": "assertTextContains", "selector": ".kpi-card:has-text('Total Billed') .kpi-value", "expected": "₹" },
+        { "action": "assertVisible", "selector": ".kpi-card:has-text('Outstanding Receivables')" },
+        { "action": "assertTextContains", "selector": ".kpi-card:has-text('Outstanding Receivables') .kpi-value", "expected": "₹" },
+        { "action": "assertVisible", "selector": ".so-table td:has-text('₹')" }
+      ]
+    },
+    {
+      "id": "TESTIM-FIN-002",
+      "name": "Issue Client Invoice Modal Form Validation",
+      "steps": [
+        { "action": "click", "selector": "button:has-text('Create Invoice')" },
+        { "action": "assertVisible", "selector": "text=Issue Client Invoice" },
+        { "action": "assertVisible", "selector": "text=Amount (₹)" },
+        { "action": "click", "selector": "button:has-text('Cancel')" },
+        { "action": "assertNotVisible", "selector": "text=Issue Client Invoice" }
+      ]
+    },
+    {
+      "id": "TESTIM-FIN-003",
+      "name": "Record Payment Settlement Modal Validation",
+      "steps": [
+        { "action": "click", "selector": ".so-table button:has-text('Record Pay')" },
+        { "action": "assertVisible", "selector": "text=Record Payment Settlement" },
+        { "action": "assertVisible", "selector": "text=Payment Amount (₹)" },
+        { "action": "click", "selector": "button:has-text('Cancel')" }
+      ]
+    },
+    {
+      "id": "TESTIM-FIN-004",
+      "name": "Agency Expenses & Media Spend Ledger in Rupees (₹)",
+      "steps": [
+        { "action": "navigate", "url": "/expenses" },
+        { "action": "assertVisible", "selector": "text=Agency Expenses & Media Spend" },
+        { "action": "assertVisible", "selector": ".kpi-card:has-text('Total Monthly Expenses')" },
+        { "action": "assertTextContains", "selector": ".kpi-card:has-text('Total Monthly Expenses') .kpi-value", "expected": "₹" },
+        { "action": "click", "selector": "button:has-text('Software')" },
+        { "action": "assertVisible", "selector": ".so-table tbody tr" },
+        { "action": "click", "selector": "button:has-text('Log Expense')" },
+        { "action": "assertVisible", "selector": "text=Log Operational Expense" },
+        { "action": "assertVisible", "selector": "text=Amount (₹)" },
+        { "action": "type", "selector": "input[placeholder*='Figma Enterprise']", "value": "Testim Infrastructure License" },
+        { "action": "click", "selector": "button[type='submit']:has-text('Log Expense')" },
+        { "action": "assertVisible", "selector": "text=Testim Infrastructure License" }
+      ]
+    }
+  ]
+}
+

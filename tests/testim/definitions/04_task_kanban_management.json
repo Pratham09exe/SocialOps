@@ -1,0 +1,40 @@
+{
+  "suite": "Module 04: Project & Task Kanban Management",
+  "description": "Validates the operations Kanban board, sprint stage transitions, client filtering, and task deliverable creation.",
+  "tests": [
+    {
+      "id": "TESTIM-TSK-001",
+      "name": "Kanban Board 4-Column Workflow & Task Cards",
+      "steps": [
+        { "action": "navigate", "url": "/tasks" },
+        { "action": "assertVisible", "selector": "text=Operations & Deliverables Kanban" },
+        { "action": "assertVisible", "selector": "span:has-text('To Do')" },
+        { "action": "assertVisible", "selector": "span:has-text('In Progress')" },
+        { "action": "assertVisible", "selector": "span:has-text('In Review')" },
+        { "action": "assertVisible", "selector": "span:has-text('Completed')" }
+      ]
+    },
+    {
+      "id": "TESTIM-TSK-002",
+      "name": "Deliverable Filtering by Client Account",
+      "steps": [
+        { "action": "selectOption", "selector": "select", "value": "NovaWave Audio" },
+        { "action": "assertValue", "selector": "select", "expected": "NovaWave Audio" },
+        { "action": "selectOption", "selector": "select", "value": "All" },
+        { "action": "assertValue", "selector": "select", "expected": "All" }
+      ]
+    },
+    {
+      "id": "TESTIM-TSK-003",
+      "name": "Create Campaign Deliverable Task Modal",
+      "steps": [
+        { "action": "click", "selector": "button:has-text('New Task')" },
+        { "action": "assertVisible", "selector": "text=Create New Task" },
+        { "action": "type", "selector": "input[placeholder*='Autumn Lookbook Reel Cutdown']", "value": "Testim Automated Deliverable Sprint #1" },
+        { "action": "click", "selector": "button[type='submit']:has-text('Create Deliverable')" },
+        { "action": "assertVisible", "selector": "text=Testim Automated Deliverable Sprint #1" }
+      ]
+    }
+  ]
+}
+
