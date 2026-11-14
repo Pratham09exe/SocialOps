@@ -23,7 +23,7 @@ export const testimConfig = {
   browser: process.env.TESTIM_BROWSER || 'chrome',
   mode: process.env.TESTIM_MODE || 'selenium',
   headless: process.env.TESTIM_HEADLESS !== 'false',
-  tunnel: true,
+  tunnel: process.env.TESTIM_TUNNEL === 'true',
   tunnelPort: 5173,
   
   // Timeouts & Execution Options

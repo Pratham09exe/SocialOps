@@ -71,8 +71,10 @@ async function runTestim() {
   }
   testimArgs.push('--base-url', baseUrl);
   testimArgs.push('--grid', grid);
-  testimArgs.push('--tunnel');
-  testimArgs.push('--tunnel-port', '5173');
+  if (process.env.TESTIM_TUNNEL === 'true') {
+    testimArgs.push('--tunnel');
+    testimArgs.push('--tunnel-port', '5173');
+  }
   testimArgs.push('--report-file', JUNIT_FILE);
   testimArgs.push('--reporters', 'junit');
 
