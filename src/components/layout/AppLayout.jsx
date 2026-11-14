@@ -43,10 +43,10 @@ export default function AppLayout() {
 
     addTask({
       title: campaignName,
-      client: selectedClient || (clients[0]?.name || 'Apex Media Global'),
+      client: selectedClient || (clients[0]?.name || 'Chakankar Digital Innovations'),
       channel: channel,
       priority: 'High',
-      assignee: 'Elena Rostova',
+      assignee: employees[0]?.name || 'Sahil Mahale',
       dueDate: targetDate,
       sla: '48h left'
     });
@@ -54,7 +54,7 @@ export default function AppLayout() {
     addCalendarEvent({
       day: parseInt(targetDate.split('-')[2]) || 20,
       title: campaignName,
-      client: selectedClient || (clients[0]?.name || 'Apex Media Global'),
+      client: selectedClient || (clients[0]?.name || 'Chakankar Digital Innovations'),
       platform: channel,
       status: 'Scheduled',
       time: '14:00'

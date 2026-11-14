@@ -60,13 +60,13 @@ export default function ContentRequests() {
   const [isNewRequestModalOpen, setIsNewRequestModalOpen] = useState(false);
   const [selectedRequestDetails, setSelectedRequestDetails] = useState(null);
   const [assignModalRequest, setAssignModalRequest] = useState(null);
-  const [assignedEmployeeName, setAssignedEmployeeName] = useState(employees[0]?.name || 'Elena Rostova');
+  const [assignedEmployeeName, setAssignedEmployeeName] = useState(employees[0]?.name || 'Sahil Mahale');
   const [submitDeliverableModalRequest, setSubmitDeliverableModalRequest] = useState(null);
   const [clientReviewModalRequest, setClientReviewModalRequest] = useState(null);
 
   // New Request Form State (Sections A through H)
   const [reqTitle, setReqTitle] = useState('');
-  const [reqClient, setReqClient] = useState(clients[0]?.name || clients[0]?.business_name || 'NovaWave Audio');
+  const [reqClient, setReqClient] = useState(clients[0]?.name || clients[0]?.business_name || 'Chakankar Digital Innovations');
   const [reqIndustry, setReqIndustry] = useState(INDUSTRY_OPTIONS[0]);
   const [reqProductOrService, setReqProductOrService] = useState('');
   const [reqTopic, setReqTopic] = useState('');
@@ -106,14 +106,13 @@ export default function ContentRequests() {
     if (activeRole === 'client') {
       const clientName = (user?.name || '').toLowerCase();
       const isClientMatch = (req.client || '').toLowerCase().includes(clientName) ||
-        clientName.includes((req.client || '').toLowerCase()) ||
-        req.client === 'NovaWave Audio'; // Default demo match
+        clientName.includes((req.client || '').toLowerCase());
       if (!isClientMatch) return false;
     }
 
     // Role based scoping: Employees see assigned requests when in staff view if filtered
     if (activeRole === 'employee' && activeTab === 'My Assigned') {
-      const empName = (user?.name || 'Elena Rostova').toLowerCase();
+      const empName = (user?.name || 'Sahil Mahale').toLowerCase();
       if (!req.assignedEmployee || !req.assignedEmployee.toLowerCase().includes(empName)) return false;
     }
 
@@ -602,7 +601,7 @@ export default function ContentRequests() {
                     <button
                       onClick={() => {
                         setAssignModalRequest(req);
-                        setAssignedEmployeeName(req.assignedEmployee || employees[0]?.name || 'Elena Rostova');
+                        setAssignedEmployeeName(req.assignedEmployee || employees[0]?.name || 'Sahil Mahale');
                       }}
                       className="btn-primary"
                       style={{ fontSize: '12px', padding: '6px 12px' }}

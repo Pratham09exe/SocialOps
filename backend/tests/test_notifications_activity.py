@@ -336,6 +336,10 @@ def test_client_monthly_metrics_isolation():
         }, headers={"Authorization": f"Bearer {admin_token}"})
         assert metric_res.status_code == 201
 
-        # Marcus Vance (Kinetix client) attempts to access Aura Pulse metrics -> 403 Forbidden
+        # Attempt to access another client's metrics -> 403 Forbidden
         hack_res = client.get(f"/api/v1/analytics/metrics?client_id={aura_client['account_id']}", headers={"Authorization": f"Bearer {client_token}"})
+        assert hack_res.status_code == 403
+    else:
+        # Cross-client unauthorized query check
+        hack_res = client.get("/api/v1/analytics/metrics?client_id=99999", headers={"Authorization": f"Bearer {client_token}"})
         assert hack_res.status_code == 403

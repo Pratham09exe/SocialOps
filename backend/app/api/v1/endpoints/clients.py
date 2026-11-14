@@ -81,7 +81,7 @@ def format_client_response(client: Client) -> dict:
         "sector": client.industry,
         "contactPerson": client.contact_person,
         "brandDescription": client.brand_description,
-        "accountLead": account_lead_name or "Elena Rostova",
+        "accountLead": account_lead_name or "Sahil Mahale",
         "monthlyRetainer": monthly_price,
         "activeCampaignsCount": len(client.social_accounts or []) * 2 or 4,
         "activeAssetsCount": len(client.social_accounts or []) * 6 or 12,

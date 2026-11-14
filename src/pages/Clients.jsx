@@ -37,7 +37,7 @@ export default function Clients() {
   const [brandDescription, setBrandDescription] = useState('');
   const [tier, setTier] = useState('Growth');
   const [sector, setSector] = useState('Consumer Tech');
-  const [accountLead, setAccountLead] = useState(employees[0]?.name || 'Elena Rostova');
+  const [accountLead, setAccountLead] = useState(employees[0]?.name || 'Sahil Mahale');
   const [monthlyRetainer, setMonthlyRetainer] = useState(15000);
 
   const TIER_PRICES = {
@@ -421,7 +421,7 @@ export default function Clients() {
                 <div style={{ textAlign: 'right' }}>
                   <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>Account Lead</span>
                   <div style={{ fontSize: '12.5px', fontWeight: 500, color: 'var(--text-primary)' }}>
-                    {client.accountLead || 'Elena Rostova'}
+                    {client.accountLead || 'Sahil Mahale'}
                   </div>
                 </div>
               </div>
@@ -455,7 +455,7 @@ export default function Clients() {
               <label className="saas-label">Primary Contact Person</label>
               <input
                 type="text"
-                placeholder="e.g. Marcus Vance"
+                placeholder="e.g. Sai Chakankar"
                 value={contactPerson}
                 onChange={(e) => setContactPerson(e.target.value)}
                 className="saas-input"

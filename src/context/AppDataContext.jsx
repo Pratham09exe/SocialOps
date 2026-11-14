@@ -29,13 +29,13 @@ export const useAppData = () => useContext(AppDataContext);
 
 export const AppDataProvider = ({ children }) => {
   // Purge legacy demo cache if present on client
-  if (typeof window !== 'undefined' && localStorage.getItem('so_clean_v2') !== 'true') {
+  if (typeof window !== 'undefined' && localStorage.getItem('so_clean_v3') !== 'true') {
     [
       'so_clients', 'so_employees', 'so_approvals', 'so_compliance',
       'so_tasks', 'so_calendar', 'so_invoices', 'so_expenses',
       'so_activity', 'so_workload', 'so_content_requests'
     ].forEach(k => localStorage.removeItem(k));
-    localStorage.setItem('so_clean_v2', 'true');
+    localStorage.setItem('so_clean_v3', 'true');
   }
 
   // Primary datasets initialized with clean defaults
@@ -513,7 +513,7 @@ export const AppDataProvider = ({ children }) => {
       const newSignoff = {
         id: `#SIG-${Math.floor(10000 + Math.random() * 90000)}`,
         deliverable: targetItem.title,
-        authorizer: 'Alex Mercer (Platform Admin)',
+        authorizer: 'Prathamesh Nehere (Platform Admin)',
         decision: decision === 'Approved' ? 'Approved (Signed)' : 'Revision Enforced',
         timestamp: 'Just now',
         hash: `0x${Math.random().toString(16).substring(2, 6)}...${Math.random().toString(16).substring(2, 6)}`
@@ -521,7 +521,7 @@ export const AppDataProvider = ({ children }) => {
       setComplianceLogs(prev => [newSignoff, ...prev]);
 
       addActivityLog(
-        'Alex Mercer',
+        'Prathamesh Nehere',
         'Platform Admin',
         decision === 'Approved' ? 'Content Approved' : 'Revisions Requested',
         targetItem.title,
@@ -548,7 +548,7 @@ export const AppDataProvider = ({ children }) => {
         };
         const created = await tasksApi.createTask(payload);
         setTasks(prev => [created, ...prev]);
-        addActivityLog('Alex Mercer', 'Admin', 'Task Created', created.title, `Client: ${created.client}`);
+        addActivityLog('Prathamesh Nehere', 'Admin', 'Task Created', created.title, `Client: ${created.client}`);
         fetchWorkload();
         return created;
       }
@@ -562,7 +562,7 @@ export const AppDataProvider = ({ children }) => {
       ...taskData
     };
     setTasks(prev => [newTask, ...prev]);
-    addActivityLog('Alex Mercer', 'Admin', 'Task Created', taskData.title, `Client: ${taskData.client}`);
+    addActivityLog('Prathamesh Nehere', 'Admin', 'Task Created', taskData.title, `Client: ${taskData.client}`);
     return newTask;
   };
 
@@ -878,7 +878,7 @@ export const AppDataProvider = ({ children }) => {
         };
         const created = await clientsApi.createClient(payload);
         setClients(prev => [created, ...prev]);
-        addActivityLog('Alex Mercer', 'Admin', 'Client Onboarded', created.name, `Retainer: ₹${Number(created.monthlyRetainer).toLocaleString('en-IN')}/mo`);
+        addActivityLog('Prathamesh Nehere', 'Admin', 'Client Onboarded', created.name, `Retainer: ₹${Number(created.monthlyRetainer).toLocaleString('en-IN')}/mo`);
         return created;
       }
     } catch (err) {
@@ -899,7 +899,7 @@ export const AppDataProvider = ({ children }) => {
       ...clientData
     };
     setClients(prev => [newClient, ...prev]);
-    addActivityLog('Alex Mercer', 'Admin', 'Client Onboarded', clientData.name, `Retainer: ₹${Number(clientData.monthlyRetainer).toLocaleString('en-IN')}/mo`);
+    addActivityLog('Prathamesh Nehere', 'Admin', 'Client Onboarded', clientData.name, `Retainer: ₹${Number(clientData.monthlyRetainer).toLocaleString('en-IN')}/mo`);
     return newClient;
   };
 
@@ -921,7 +921,7 @@ export const AppDataProvider = ({ children }) => {
         };
         const created = await employeesApi.createEmployee(payload);
         setEmployees(prev => [created, ...prev]);
-        addActivityLog('Alex Mercer', 'Admin', 'Staff Roster Updated', `Added ${created.name}`, `${created.role} • ${created.department}`);
+        addActivityLog('Prathamesh Nehere', 'Admin', 'Staff Roster Updated', `Added ${created.name}`, `${created.role} • ${created.department}`);
         return created;
       }
     } catch (err) {
@@ -939,7 +939,7 @@ export const AppDataProvider = ({ children }) => {
       ...empData
     };
     setEmployees(prev => [newEmp, ...prev]);
-    addActivityLog('Alex Mercer', 'Admin', 'Staff Roster Updated', `Added ${empData.name}`, `${empData.role} • ${empData.department}`);
+    addActivityLog('Prathamesh Nehere', 'Admin', 'Staff Roster Updated', `Added ${empData.name}`, `${empData.role} • ${empData.department}`);
     return newEmp;
   };
 

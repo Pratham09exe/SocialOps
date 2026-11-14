@@ -81,6 +81,9 @@ def test_admin_can_create_client():
     headers = {"Authorization": f"Bearer {admin_token}"}
     
     import uuid
+    from app.db.session import SessionLocal
+    from app.models.account import Account
+
     uid = uuid.uuid4().hex[:6]
     payload = {
         "business_name": f"Test Brand {uid}",
@@ -89,11 +92,24 @@ def test_admin_can_create_client():
         "username": f"test_brand_{uid}",
         "tier": "Starter Presence"
     }
-    response = client.post("/api/v1/clients", json=payload, headers=headers)
-    assert response.status_code == 201
-    data = response.json()
-    assert data["business_name"] == f"Test Brand {uid}"
-    assert data["tier"] == "Starter Presence"
+    new_client_id = None
+    try:
+        response = client.post("/api/v1/clients", json=payload, headers=headers)
+        assert response.status_code == 201
+        data = response.json()
+        new_client_id = data["account_id"]
+        assert data["business_name"] == f"Test Brand {uid}"
+        assert data["tier"] == "Starter Presence"
+    finally:
+        if new_client_id:
+            db = SessionLocal()
+            try:
+                acc = db.query(Account).filter(Account.account_id == new_client_id).first()
+                if acc:
+                    db.delete(acc)
+                    db.commit()
+            finally:
+                db.close()
 
 
 def test_social_accounts_isolation():

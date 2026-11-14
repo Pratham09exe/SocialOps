@@ -32,7 +32,7 @@ def format_approval_response(appr: Approval) -> dict:
     revision_cycle = f"v{max(1, cycle_num)}"
 
     # Creator display name
-    lead_creator = "Elena Rostova"
+    lead_creator = "Sahil Mahale"
     if item and item.assigned_employee:
         lead_creator = item.assigned_employee.full_name
     elif item and item.creator:

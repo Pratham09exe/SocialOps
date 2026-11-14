@@ -40,42 +40,56 @@ def test_e2e_client_onboarding_and_isolation():
     new_client_username = f"nebula_{timestamp}"
     new_client_password = "ClientPass2026!#"
 
-    # Step 1: Admin provisions client account
-    create_payload = {
-        "email": new_client_email,
-        "username": new_client_username,
-        "password": new_client_password,
-        "business_name": f"Nebula AI Labs {timestamp}",
-        "industry": "IT / Software / Technology",
-        "contact_person": "Dr. Sarah Chen",
-        "tier": "Growth",
-        "agreed_monthly_price": 18500.00
-    }
-    create_res = client.post("/api/v1/clients", json=create_payload, headers=admin_headers)
-    assert create_res.status_code == 201
-    created_client_data = create_res.json()
-    new_client_id = created_client_data["account_id"]
-    assert created_client_data["business_name"] == f"Nebula AI Labs {timestamp}"
+    new_client_id = None
+    try:
+        # Step 1: Admin provisions client account
+        create_payload = {
+            "email": new_client_email,
+            "username": new_client_username,
+            "password": new_client_password,
+            "business_name": f"Nebula AI Labs {timestamp}",
+            "industry": "IT / Software / Technology",
+            "contact_person": "Dr. Sarah Chen",
+            "tier": "Growth",
+            "agreed_monthly_price": 18500.00
+        }
+        create_res = client.post("/api/v1/clients", json=create_payload, headers=admin_headers)
+        assert create_res.status_code == 201
+        created_client_data = create_res.json()
+        new_client_id = created_client_data["account_id"]
+        assert created_client_data["business_name"] == f"Nebula AI Labs {timestamp}"
 
-    # Step 2: New client authenticates
-    client_token = get_auth_token(new_client_email, new_client_password)
-    client_headers = {"Authorization": f"Bearer {client_token}"}
+        # Step 2: New client authenticates
+        client_token = get_auth_token(new_client_email, new_client_password)
+        client_headers = {"Authorization": f"Bearer {client_token}"}
 
-    # Step 3: Client retrieves client directory — MUST ONLY see their own profile
-    get_res = client.get("/api/v1/clients", headers=client_headers)
-    assert get_res.status_code == 200
-    visible_clients = get_res.json()
-    assert len(visible_clients) == 1
-    assert visible_clients[0]["account_id"] == new_client_id
-    assert visible_clients[0]["business_name"] == f"Nebula AI Labs {timestamp}"
+        # Step 3: Client retrieves client directory — MUST ONLY see their own profile
+        get_res = client.get("/api/v1/clients", headers=client_headers)
+        assert get_res.status_code == 200
+        visible_clients = get_res.json()
+        assert len(visible_clients) == 1
+        assert visible_clients[0]["account_id"] == new_client_id
+        assert visible_clients[0]["business_name"] == f"Nebula AI Labs {timestamp}"
 
-    # Step 4: Client is strictly forbidden from accessing internal employee roster
-    emp_res = client.get("/api/v1/employees", headers=client_headers)
-    assert emp_res.status_code == 403
+        # Step 4: Client is strictly forbidden from accessing internal employee roster
+        emp_res = client.get("/api/v1/employees", headers=client_headers)
+        assert emp_res.status_code == 403
 
-    # Step 5: Client is strictly forbidden from viewing agency internal expenses
-    exp_res = client.get("/api/v1/expenses", headers=client_headers)
-    assert exp_res.status_code == 403
+        # Step 5: Client is strictly forbidden from viewing agency internal expenses
+        exp_res = client.get("/api/v1/expenses", headers=client_headers)
+        assert exp_res.status_code == 403
+    finally:
+        if new_client_id:
+            from app.db.session import SessionLocal
+            from app.models.account import Account
+            db = SessionLocal()
+            try:
+                acc = db.query(Account).filter(Account.account_id == new_client_id).first()
+                if acc:
+                    db.delete(acc)
+                    db.commit()
+            finally:
+                db.close()
 
 
 # ============================================================================
@@ -91,62 +105,82 @@ def test_e2e_employee_lifecycle_and_task_delegation():
     emp_username = f"staff_{timestamp}"
     emp_password = "StaffSecure2026!#"
 
-    # Step 1: Admin provisions employee
-    emp_payload = {
-        "email": emp_email,
-        "username": emp_username,
-        "password": emp_password,
-        "full_name": f"Kiran Patel {timestamp}",
-        "phone": "+1-555-0199",
-        "joining_date": date.today().isoformat(),
-        "department": "Video Production",
-        "job_title": "Motion Graphics Lead",
-        "access_level": "standard",
-        "billable_rate": 145.00,
-        "max_weekly_hours": 40
-    }
-    create_res = client.post("/api/v1/employees", json=emp_payload, headers=admin_headers)
-    assert create_res.status_code == 201
-    emp_data = create_res.json()
-    new_emp_id = emp_data["account_id"]
+    new_emp_id = None
+    task_id = None
+    try:
+        # Step 1: Admin provisions employee
+        emp_payload = {
+            "email": emp_email,
+            "username": emp_username,
+            "password": emp_password,
+            "full_name": f"Kiran Patel {timestamp}",
+            "phone": "+1-555-0199",
+            "joining_date": date.today().isoformat(),
+            "department": "Video Production",
+            "job_title": "Motion Graphics Lead",
+            "access_level": "standard",
+            "billable_rate": 145.00,
+            "max_weekly_hours": 40
+        }
+        create_res = client.post("/api/v1/employees", json=emp_payload, headers=admin_headers)
+        assert create_res.status_code == 201
+        emp_data = create_res.json()
+        new_emp_id = emp_data["account_id"]
 
-    # Step 2: Employee logs in
-    emp_token = get_auth_token(emp_email, emp_password)
-    emp_headers = {"Authorization": f"Bearer {emp_token}"}
+        # Step 2: Employee logs in
+        emp_token = get_auth_token(emp_email, emp_password)
+        emp_headers = {"Authorization": f"Bearer {emp_token}"}
 
-    # Step 3: Admin delegates a task to this new employee
-    task_payload = {
-        "title": f"Q4 Showreel 3D VFX #{timestamp}",
-        "description": "Render 4K typography and 3D product transitions",
-        "client": "Monolith AI",
-        "assigned_employee_id": new_emp_id,
-        "priority": "High",
-        "stage": "To Do",
-        "estimated_hours": 12.50,
-        "due_date": (date.today() + timedelta(days=4)).isoformat()
-    }
-    task_res = client.post("/api/v1/tasks", json=task_payload, headers=admin_headers)
-    assert task_res.status_code == 201
-    task_id = task_res.json()["task_id"]
+        # Step 3: Admin delegates a task to this new employee
+        task_payload = {
+            "title": f"Q4 Showreel 3D VFX #{timestamp}",
+            "description": "Render 4K typography and 3D product transitions",
+            "client": "Monolith AI",
+            "assigned_employee_id": new_emp_id,
+            "priority": "High",
+            "stage": "To Do",
+            "estimated_hours": 12.50,
+            "due_date": (date.today() + timedelta(days=4)).isoformat()
+        }
+        task_res = client.post("/api/v1/tasks", json=task_payload, headers=admin_headers)
+        assert task_res.status_code == 201
+        task_id = task_res.json()["task_id"]
 
-    # Step 4: Employee inspects their notifications — verifies TASK_ASSIGNED was received
-    notif_res = client.get("/api/v1/notifications", headers=emp_headers)
-    assert notif_res.status_code == 200
-    emp_notifications = notif_res.json()["notifications"]
-    assert any(n["entity_id"] == task_id and n["event_type"] == "TASK_ASSIGNED" for n in emp_notifications)
+        # Step 4: Employee inspects their notifications — verifies TASK_ASSIGNED was received
+        notif_res = client.get("/api/v1/notifications", headers=emp_headers)
+        assert notif_res.status_code == 200
+        emp_notifications = notif_res.json()["notifications"]
+        assert any(n["entity_id"] == task_id and n["event_type"] == "TASK_ASSIGNED" for n in emp_notifications)
 
-    # Step 5: Employee updates task progress to "In Progress"
-    update_res = client.patch(f"/api/v1/tasks/{task_id}", json={"stage": "In Progress"}, headers=emp_headers)
-    assert update_res.status_code == 200
-    assert update_res.json()["status"] == "In Progress"
+        # Step 5: Employee updates task progress to "In Progress"
+        update_res = client.patch(f"/api/v1/tasks/{task_id}", json={"stage": "In Progress"}, headers=emp_headers)
+        assert update_res.status_code == 200
+        assert update_res.json()["status"] == "In Progress"
 
-    # Step 6: Verify agency workload metrics include the allocated hours
-    workload_res = client.get("/api/v1/workload", headers=admin_headers)
-    assert workload_res.status_code == 200
-    workload_data = workload_res.json()
-    target_emp_workload = next((e for e in workload_data["operatives"] if e["employee_id"] == new_emp_id), None)
-    assert target_emp_workload is not None
-    assert target_emp_workload["allocatedHours"] >= 12.50
+        # Step 6: Verify agency workload metrics include the allocated hours
+        workload_res = client.get("/api/v1/workload", headers=admin_headers)
+        assert workload_res.status_code == 200
+        workload_data = workload_res.json()
+        target_emp_workload = next((e for e in workload_data["operatives"] if e["employee_id"] == new_emp_id), None)
+        assert target_emp_workload is not None
+        assert target_emp_workload["allocatedHours"] >= 12.50
+    finally:
+        from app.db.session import SessionLocal
+        from app.models.account import Account
+        from app.models.task import Task
+        db = SessionLocal()
+        try:
+            if task_id:
+                t_obj = db.query(Task).filter(Task.task_id == task_id).first()
+                if t_obj:
+                    db.delete(t_obj)
+            if new_emp_id:
+                acc_obj = db.query(Account).filter(Account.account_id == new_emp_id).first()
+                if acc_obj:
+                    db.delete(acc_obj)
+            db.commit()
+        finally:
+            db.close()
 
 
 # ============================================================================
@@ -213,7 +247,7 @@ def test_e2e_content_submission_and_client_approval_workflow():
     # Onboard a rogue client to attempt unauthorized review
     admin_token = get_auth_token("prathameshnehere@gmail.com", "Admin@123")
     rogue_email = f"rogue_{timestamp}@gmail.com"
-    client.post("/api/v1/clients", json={
+    rogue_res = client.post("/api/v1/clients", json={
         "email": rogue_email,
         "username": f"rogue_{timestamp}",
         "password": "RoguePassword123!",
@@ -221,14 +255,28 @@ def test_e2e_content_submission_and_client_approval_workflow():
         "industry": "Retail / Local Business",
         "contact_person": "Rogue User"
     }, headers={"Authorization": f"Bearer {admin_token}"})
+    rogue_client_id = rogue_res.json().get("account_id") if rogue_res.status_code == 201 else None
     rogue_token = get_auth_token(rogue_email, "RoguePassword123!")
 
-    unauthorized_res = client.post(
-        f"/api/v1/approvals/{approval_id}/review",
-        json={"decision": "Approved", "feedbackNotes": "Attacker approving"},
-        headers={"Authorization": f"Bearer {rogue_token}"}
-    )
-    assert unauthorized_res.status_code == 403
+    try:
+        unauthorized_res = client.post(
+            f"/api/v1/approvals/{approval_id}/review",
+            json={"decision": "Approved", "feedbackNotes": "Attacker approving"},
+            headers={"Authorization": f"Bearer {rogue_token}"}
+        )
+        assert unauthorized_res.status_code == 403
+    finally:
+        if rogue_client_id:
+            from app.db.session import SessionLocal
+            from app.models.account import Account
+            db = SessionLocal()
+            try:
+                r_acc = db.query(Account).filter(Account.account_id == rogue_client_id).first()
+                if r_acc:
+                    db.delete(r_acc)
+                    db.commit()
+            finally:
+                db.close()
 
 
 # ============================================================================
