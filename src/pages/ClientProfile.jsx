@@ -24,7 +24,7 @@ export default function ClientProfile() {
   const { clients, updateClientProfile } = useAppData();
   const { user, activeRole } = useAuth();
 
-  // Find client record matching active user
+  // Find client record matching active session
   const userClient = clients.find(c =>
     (c.account_id && String(c.account_id) === String(user?.id)) ||
     (c.id && String(c.id) === String(user?.clientId)) ||

@@ -100,7 +100,7 @@ export default function ContentRequests() {
   const [reviewFeedback, setReviewFeedback] = useState('');
   const [reviewMode, setReviewMode] = useState('approve'); // 'approve' | 'revision'
 
-  // Filter requests based on user role and filters
+  // Filter requests based on role and filters
   const filteredRequests = contentRequests.filter((req) => {
     // Role based scoping: Clients only see their brand's requests
     if (activeRole === 'client') {
@@ -212,7 +212,7 @@ export default function ContentRequests() {
     setReqDetailedInstructions('');
   };
 
-  // Handle Admin Assign Employee
+  // Handle Assign Employee
   const handleConfirmAssignment = (e) => {
     e.preventDefault();
     if (!assignModalRequest) return;

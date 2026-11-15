@@ -905,6 +905,90 @@ export const AppDataProvider = ({ children }) => {
     return newClient;
   };
 
+  // Update Employee
+  const updateEmployee = async (empId, empData) => {
+    // Optimistic update
+    setEmployees(prev =>
+      prev.map(e => {
+        const matches = String(e.id) === String(empId) || String(e.account_id) === String(empId);
+        if (!matches) return e;
+        return {
+          ...e,
+          name: empData.name || e.name,
+          email: empData.email || e.email,
+          role: empData.role || e.role,
+          department: empData.department || e.department,
+          billableRate: empData.billableRate !== undefined ? empData.billableRate : e.billableRate,
+          status: empData.status || e.status,
+        };
+      })
+    );
+
+    try {
+      if (isBackendConnected) {
+        const payload = {
+          full_name: empData.name,
+          email: empData.email,
+          department: empData.department,
+          job_title: empData.role,
+          billable_rate: Number(empData.billableRate) || 1500,
+        };
+        await employeesApi.updateEmployee(empId, payload);
+        await fetchEmployees();
+        addActivityLog('Prathamesh Nehere', 'Admin', 'Staff Record Updated', empData.name, `${empData.role} • ${empData.department}`);
+      }
+    } catch (err) {
+      console.warn('Backend employee update failed:', err.message);
+    }
+  };
+
+  // Update Client
+  const updateClient = async (clientId, clientData) => {
+    // Optimistic update
+    setClients(prev =>
+      prev.map(c => {
+        const matches = String(c.id) === String(clientId) || String(c.account_id) === String(clientId);
+        if (!matches) return c;
+        return {
+          ...c,
+          name: clientData.name || c.name,
+          business_name: clientData.name || c.business_name,
+          contactPerson: clientData.contactPerson !== undefined ? clientData.contactPerson : c.contactPerson,
+          contact_person: clientData.contactPerson !== undefined ? clientData.contactPerson : c.contact_person,
+          tier: clientData.tier || c.tier,
+          sector: clientData.sector || c.sector,
+          accountLead: clientData.accountLead || c.accountLead,
+          monthlyRetainer: clientData.monthlyRetainer !== undefined ? clientData.monthlyRetainer : c.monthlyRetainer,
+          brandDescription: clientData.brandDescription !== undefined ? clientData.brandDescription : c.brandDescription,
+          brand_description: clientData.brandDescription !== undefined ? clientData.brandDescription : c.brand_description,
+        };
+      })
+    );
+
+    try {
+      if (isBackendConnected) {
+        const matchedEmp = employees.find(e =>
+          (e.name && e.name.toLowerCase() === (clientData.accountLead || '').toLowerCase()) ||
+          (e.full_name && e.full_name.toLowerCase() === (clientData.accountLead || '').toLowerCase())
+        );
+        const payload = {
+          business_name: clientData.name,
+          industry: clientData.sector,
+          brand_description: clientData.brandDescription || '',
+          contact_person: clientData.contactPerson || '',
+          tier: clientData.tier,
+          account_manager_employee_id: matchedEmp ? (matchedEmp.account_id || matchedEmp.id) : null,
+          monthly_retainer: Number(clientData.monthlyRetainer) || 15000,
+        };
+        await clientsApi.updateClient(clientId, payload);
+        await fetchClients();
+        addActivityLog('Prathamesh Nehere', 'Admin', 'Client Record Updated', clientData.name, `Tier: ${clientData.tier} • ₹${Number(clientData.monthlyRetainer).toLocaleString('en-IN')}/mo`);
+      }
+    } catch (err) {
+      console.warn('Backend client update failed:', err.message);
+    }
+  };
+
   // Employees
   const addEmployee = async (empData) => {
     try {
@@ -1085,6 +1169,8 @@ export const AppDataProvider = ({ children }) => {
         autoRebalanceWorkload,
         addClient,
         addEmployee,
+        updateEmployee,
+        updateClient,
         fetchClients,
         fetchEmployees,
         fetchTasks,

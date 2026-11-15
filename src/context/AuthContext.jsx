@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('socialops_token');
   };
 
-  // Derive activeRole directly from authenticated backend user identity
+  // Active role mapping from session
   const activeRole = user?.role || '';
 
   return (

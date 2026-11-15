@@ -55,7 +55,7 @@ export default function Dashboard() {
   };
 
   // =========================================================================
-  // 1. ADMIN MENTAL MODEL VIEW (Bento Grid Layout)
+  // Bento Grid Layout
   // =========================================================================
   if (activeRole === 'admin') {
     return (
