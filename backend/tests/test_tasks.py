@@ -1,5 +1,8 @@
+import pytest
 from fastapi.testclient import TestClient
 from app.main import app
+from app.db.session import SessionLocal
+from app.models.task import Task
 
 client = TestClient(app)
 
@@ -7,6 +10,16 @@ ADMIN_EMAIL = "prathameshnehere@gmail.com"
 EMPLOYEE_EMAIL = "sahilmahale@gmail.com"
 CLIENT_EMAIL = "saichakankar@gmail.com"
 PASSWORD = "Admin@123"
+
+@pytest.fixture(autouse=True)
+def cleanup_tasks():
+    yield
+    db = SessionLocal()
+    try:
+        db.query(Task).delete()
+        db.commit()
+    finally:
+        db.close()
 
 def get_auth_token(email: str = ADMIN_EMAIL, password: str = PASSWORD) -> str:
     response = client.post("/api/v1/auth/login", json={"email": email, "password": password})

@@ -29,14 +29,14 @@ export const useAppData = () => useContext(AppDataContext);
 
 export const AppDataProvider = ({ children }) => {
   // Purge legacy demo cache if present on client
-  if (typeof window !== 'undefined' && localStorage.getItem('so_clean_v4') !== 'true') {
+  if (typeof window !== 'undefined' && localStorage.getItem('so_clean_v5') !== 'true') {
     [
       'so_clients', 'so_employees', 'so_approvals', 'so_compliance',
       'so_tasks', 'so_calendar', 'so_invoices', 'so_expenses',
       'so_activity', 'so_workload', 'so_content_requests',
-      'so_clean_v3'
+      'so_clean_v3', 'so_clean_v4'
     ].forEach(k => localStorage.removeItem(k));
-    localStorage.setItem('so_clean_v4', 'true');
+    localStorage.setItem('so_clean_v5', 'true');
   }
 
   // Primary datasets initialized with clean defaults
@@ -184,7 +184,7 @@ export const AppDataProvider = ({ children }) => {
     if (!token) return;
     try {
       const data = await tasksApi.getTasks();
-      if (Array.isArray(data) && data.length > 0) {
+      if (Array.isArray(data)) {
         setTasks(data);
       }
     } catch (err) {
@@ -197,7 +197,7 @@ export const AppDataProvider = ({ children }) => {
     if (!token) return;
     try {
       const data = await tasksApi.getWorkload();
-      if (data && Array.isArray(data.operatives) && data.operatives.length > 0) {
+      if (data && Array.isArray(data.operatives)) {
         setWorkloadTeam(data.operatives);
       }
     } catch (err) {

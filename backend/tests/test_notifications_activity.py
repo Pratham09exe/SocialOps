@@ -1,12 +1,24 @@
+import pytest
 from datetime import date, timedelta
 from fastapi.testclient import TestClient
 from app.main import app
 from app.db.session import SessionLocal
 from app.models.account import Account
 from app.models.analytics import Notification
+from app.models.task import Task
 from app.core.events import create_notification, sanitize_text
 
 client = TestClient(app)
+
+@pytest.fixture(autouse=True)
+def cleanup_notifications_and_tasks():
+    yield
+    db = SessionLocal()
+    try:
+        db.query(Task).delete()
+        db.commit()
+    finally:
+        db.close()
 
 def get_auth_token(email: str, password: str) -> str:
     response = client.post("/api/v1/auth/login", json={"email": email, "password": password})

@@ -234,7 +234,7 @@ export default function Login() {
             type="submit"
             id="login-submit-btn"
             data-testid="login-submit-btn"
-            aria-label="Sign in to SocialOps"
+            aria-label="Log in to SocialOps"
             disabled={isLoading}
             className="btn-primary"
             style={{
@@ -249,7 +249,7 @@ export default function Login() {
               <span>Authenticating Session...</span>
             ) : (
               <>
-                <span>Sign in to SocialOps</span>
+                <span>Log In</span>
                 <ArrowRight size={15} />
               </>
             )}
