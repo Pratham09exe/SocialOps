@@ -29,14 +29,14 @@ export const useAppData = () => useContext(AppDataContext);
 
 export const AppDataProvider = ({ children }) => {
   // Purge legacy demo cache if present on client
-  if (typeof window !== 'undefined' && localStorage.getItem('so_clean_v5') !== 'true') {
+  if (typeof window !== 'undefined' && localStorage.getItem('so_clean_v6') !== 'true') {
     [
       'so_clients', 'so_employees', 'so_approvals', 'so_compliance',
       'so_tasks', 'so_calendar', 'so_invoices', 'so_expenses',
       'so_activity', 'so_workload', 'so_content_requests',
-      'so_clean_v3', 'so_clean_v4'
+      'so_clean_v3', 'so_clean_v4', 'so_clean_v5'
     ].forEach(k => localStorage.removeItem(k));
-    localStorage.setItem('so_clean_v5', 'true');
+    localStorage.setItem('so_clean_v6', 'true');
   }
 
   // Primary datasets initialized with clean defaults
@@ -237,7 +237,7 @@ export const AppDataProvider = ({ children }) => {
     if (!token) return;
     try {
       const data = await financeApi.getInvoices();
-      if (Array.isArray(data) && data.length > 0) {
+      if (Array.isArray(data)) {
         const mapped = data.map(inv => ({
           id: inv.invoice_number,
           dbId: inv.invoice_id,
@@ -267,7 +267,7 @@ export const AppDataProvider = ({ children }) => {
     if (!token) return;
     try {
       const data = await financeApi.getExpenses();
-      if (Array.isArray(data) && data.length > 0) {
+      if (Array.isArray(data)) {
         const mapped = data.map(exp => ({
           id: `EXP-${exp.expense_id}`,
           dbId: exp.expense_id,

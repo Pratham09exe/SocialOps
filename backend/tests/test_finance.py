@@ -1,9 +1,24 @@
+import pytest
 from datetime import date, timedelta
 from decimal import Decimal
 from fastapi.testclient import TestClient
 from app.main import app
+from app.db.session import SessionLocal
+from app.models.finance import Invoice, Payment, Expense
 
 client = TestClient(app)
+
+@pytest.fixture(autouse=True, scope="module")
+def cleanup_finance_records():
+    yield
+    db = SessionLocal()
+    try:
+        db.query(Payment).delete()
+        db.query(Invoice).delete()
+        db.query(Expense).delete()
+        db.commit()
+    finally:
+        db.close()
 
 def get_auth_token(email: str, password: str) -> str:
     response = client.post("/api/v1/auth/login", json={"email": email, "password": password})
