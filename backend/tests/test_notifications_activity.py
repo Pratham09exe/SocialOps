@@ -252,27 +252,35 @@ def test_approval_decision_triggers_notification_and_activity_log():
     assert sub_res.status_code == 201
     content_id = sub_res.json()["content_id"]
 
-    # Find the corresponding approval record
-    approvals_res = client.get("/api/v1/approvals", headers={"Authorization": f"Bearer {admin_token}"}).json()
-    approval = next((a for a in approvals_res if a["content_id"] == content_id), approvals_res[0])
+    try:
+        # Find the corresponding approval record
+        approvals_res = client.get("/api/v1/approvals", headers={"Authorization": f"Bearer {admin_token}"}).json()
+        approval = next((a for a in approvals_res if a["content_id"] == content_id), approvals_res[0])
 
-    # 2. Admin reviews and approves the deliverable
-    review_res = client.post(
-        f"/api/v1/approvals/{approval['approval_id']}/review",
-        json={"decision": "Approved", "review_comments": "Looks pristine!"},
-        headers={"Authorization": f"Bearer {admin_token}"}
-    )
-    assert review_res.status_code == 200
+        # 2. Admin reviews and approves the deliverable
+        review_res = client.post(
+            f"/api/v1/approvals/{approval['approval_id']}/review",
+            json={"decision": "Approved", "review_comments": "Looks pristine!"},
+            headers={"Authorization": f"Bearer {admin_token}"}
+        )
+        assert review_res.status_code == 200
 
-    # 3. Verify Elena received CONTENT_APPROVED notification
-    notifs_res = client.get("/api/v1/notifications", headers={"Authorization": f"Bearer {emp_token}"})
-    notifs = notifs_res.json()["notifications"]
-    approved_notif = next((n for n in notifs if n["event_type"] == "CONTENT_APPROVED" and n["entity_id"] == content_id), None)
-    assert approved_notif is not None
+        # 3. Verify Elena received CONTENT_APPROVED notification
+        notifs_res = client.get("/api/v1/notifications", headers={"Authorization": f"Bearer {emp_token}"})
+        notifs = notifs_res.json()["notifications"]
+        approved_notif = next((n for n in notifs if n["event_type"] == "CONTENT_APPROVED" and n["entity_id"] == content_id), None)
+        assert approved_notif is not None
 
-    # 4. Verify Activity Log recorded "Content Approved"
-    logs_res = client.get("/api/v1/activity-logs?action=Content Approved", headers={"Authorization": f"Bearer {admin_token}"})
-    assert any("Sprint Promo Video" in l["target"] for l in logs_res.json())
+        # 4. Verify Activity Log recorded "Content Approved"
+        logs_res = client.get("/api/v1/activity-logs?action=Content Approved", headers={"Authorization": f"Bearer {admin_token}"})
+        assert any("Sprint Promo Video" in l["target"] for l in logs_res.json())
+    finally:
+        from app.db.session import engine
+        from sqlalchemy import text
+        with engine.connect() as conn:
+            conn.execute(text(f"DELETE FROM approvals WHERE content_id = {content_id}"))
+            conn.execute(text(f"DELETE FROM content_items WHERE content_id = {content_id}"))
+            conn.commit()
 
 
 def test_notification_deduplication_prevents_duplicate_entries():

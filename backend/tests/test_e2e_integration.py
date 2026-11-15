@@ -266,9 +266,18 @@ def test_e2e_content_submission_and_client_approval_workflow():
         )
         assert unauthorized_res.status_code == 403
     finally:
+        from app.db.session import SessionLocal, engine
+        from sqlalchemy import text
+        from app.models.account import Account
+        try:
+            with engine.connect() as conn:
+                conn.execute(text(f"DELETE FROM client_feedbacks WHERE content_id = {content_id}"))
+                conn.execute(text(f"DELETE FROM approvals WHERE content_id = {content_id}"))
+                conn.execute(text(f"DELETE FROM content_items WHERE content_id = {content_id}"))
+                conn.commit()
+        except Exception:
+            pass
         if rogue_client_id:
-            from app.db.session import SessionLocal
-            from app.models.account import Account
             db = SessionLocal()
             try:
                 r_acc = db.query(Account).filter(Account.account_id == rogue_client_id).first()

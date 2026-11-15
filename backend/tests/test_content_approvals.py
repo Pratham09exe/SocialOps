@@ -1,7 +1,27 @@
+import pytest
 from fastapi.testclient import TestClient
 from app.main import app
 
 client = TestClient(app)
+
+@pytest.fixture(scope="module", autouse=True)
+def cleanup_content_approvals():
+    yield
+    # Automated teardown: Clean up any deliverables created during these tests
+    from app.db.session import engine
+    from sqlalchemy import text
+    with engine.connect() as conn:
+        trans = conn.begin()
+        try:
+            conn.execute(text("DELETE FROM attachments WHERE file_name = 'brand_guidelines_v2.pdf'"))
+            conn.execute(text("DELETE FROM client_feedbacks WHERE description LIKE '%font size on slide 3%'"))
+            conn.execute(text("DELETE FROM approvals WHERE content_id IN (SELECT content_id FROM content_items WHERE title IN ('Carbon Horizon Teaser Reel', 'Kinetix Q4 Infographic Slide'))"))
+            conn.execute(text("DELETE FROM content_items WHERE title IN ('Carbon Horizon Teaser Reel', 'Kinetix Q4 Infographic Slide')"))
+            conn.execute(text("DELETE FROM content_plan_targets WHERE content_plan_id IN (SELECT content_plan_id FROM content_plans WHERE campaign_notes LIKE '%Sparkling hydration%')"))
+            conn.execute(text("DELETE FROM content_plans WHERE campaign_notes LIKE '%Sparkling hydration%'"))
+            trans.commit()
+        except Exception:
+            trans.rollback()
 
 def get_auth_token(email: str, password: str) -> str:
     response = client.post("/api/v1/auth/login", json={"email": email, "password": password})

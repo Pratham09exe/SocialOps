@@ -178,19 +178,27 @@ def test_content_item_platform_validation():
     assert content_data["platform"] == "youtube"
     content_id = content_data["content_id"]
 
-    # 2. Unsupported platform in content submission returns 422
-    invalid_payload = {
-        "client": client_name,
-        "content_type": "Video 9:16",
-        "platform": "tiktok",
-        "driveUrl": "https://drive.google.com/file/d/test99999/view",
-        "caption": "Invalid platform test",
-    }
-    invalid_res = client.post("/api/v1/content/submissions", json=invalid_payload, headers=headers)
-    assert invalid_res.status_code == 422
+    try:
+        # 2. Unsupported platform in content submission returns 422
+        invalid_payload = {
+            "client": client_name,
+            "content_type": "Video 9:16",
+            "platform": "tiktok",
+            "driveUrl": "https://drive.google.com/file/d/test99999/view",
+            "caption": "Invalid platform test",
+        }
+        invalid_res = client.post("/api/v1/content/submissions", json=invalid_payload, headers=headers)
+        assert invalid_res.status_code == 422
 
-    # 3. Unsupported platform in patch returns 422
-    patch_res = client.patch(f"/api/v1/content/{content_id}", json={
-        "platform": "snapchat"
-    }, headers=headers)
-    assert patch_res.status_code == 422
+        # 3. Unsupported platform in patch returns 422
+        patch_res = client.patch(f"/api/v1/content/{content_id}", json={
+            "platform": "snapchat"
+        }, headers=headers)
+        assert patch_res.status_code == 422
+    finally:
+        from app.db.session import engine
+        from sqlalchemy import text
+        with engine.connect() as conn:
+            conn.execute(text(f"DELETE FROM approvals WHERE content_id = {content_id}"))
+            conn.execute(text(f"DELETE FROM content_items WHERE content_id = {content_id}"))
+            conn.commit()
