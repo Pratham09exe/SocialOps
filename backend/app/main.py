@@ -30,6 +30,12 @@ class SecurityHeadersMiddleware:
                 headers.append((b"x-frame-options", b"DENY"))
                 headers.append((b"referrer-policy", b"strict-origin-when-cross-origin"))
                 headers.append((b"permissions-policy", b"camera=(), microphone=(), geolocation=()"))
+                headers.append((b"strict-transport-security", b"max-age=31536000; includeSubDomains"))
+                headers.append((b"cache-control", b"no-store, no-cache, must-revalidate, private"))
+                headers.append((b"pragma", b"no-cache"))
+                headers.append((b"x-xss-protection", b"1; mode=block"))
+                # Remove server header to prevent information disclosure
+                headers = [(k, v) for k, v in headers if k.lower() != b"server"]
                 headers.append((
                     b"content-security-policy",
                     b"default-src 'self'; "

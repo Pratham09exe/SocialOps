@@ -547,16 +547,16 @@ export default function TaskBoard() {
       <Modal
         isOpen={isTaskModalOpen}
         onClose={() => setIsTaskModalOpen(false)}
-        title={`Create New Sprint Deliverable`}
+        title={`Create New Task`}
         subtitle={`Adding to column: ${targetColumn}`}
       >
         <form onSubmit={handleCreateTask} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div className="saas-form-group">
-            <label className="saas-label">Task Deliverable Title</label>
+            <label className="saas-label">Task Title</label>
             <input
               type="text"
               required
-              placeholder="e.g. Q4 Brand Narrative Hero Reel"
+              placeholder="e.g. Instagram Post Design for Q4 Campaign"
               value={taskTitle}
               onChange={(e) => setTaskTitle(e.target.value)}
               className="saas-input"
@@ -565,7 +565,7 @@ export default function TaskBoard() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div className="saas-form-group">
-              <label className="saas-label">Client Account</label>
+              <label className="saas-label">Client</label>
               <select
                 value={taskClient}
                 onChange={(e) => setTaskClient(e.target.value)}
@@ -580,7 +580,7 @@ export default function TaskBoard() {
             </div>
 
             <div className="saas-form-group">
-              <label className="saas-label">Creative Assignee</label>
+              <label className="saas-label">Assigned Employee</label>
               <select
                 value={taskAssignee}
                 onChange={(e) => setTaskAssignee(e.target.value)}
@@ -597,7 +597,7 @@ export default function TaskBoard() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div className="saas-form-group">
-              <label className="saas-label">Target Platform</label>
+              <label className="saas-label">Platform / Channel</label>
               <select
                 value={taskChannel}
                 onChange={(e) => setTaskChannel(e.target.value)}
@@ -618,6 +618,7 @@ export default function TaskBoard() {
                 onChange={(e) => setTaskPriority(e.target.value)}
                 className="saas-input"
               >
+                <option value="Urgent">Urgent</option>
                 <option value="High">High</option>
                 <option value="Medium">Medium</option>
                 <option value="Low">Low</option>
@@ -626,7 +627,7 @@ export default function TaskBoard() {
           </div>
 
           <div className="saas-form-group">
-            <label className="saas-label">Target Due Date</label>
+            <label className="saas-label">Due Date</label>
             <input
               type="text"
               placeholder="e.g. Nov 24, 2026"
@@ -648,7 +649,7 @@ export default function TaskBoard() {
               type="submit"
               className="btn-primary"
             >
-              Create Deliverable
+              Create Task
             </button>
           </div>
         </form>

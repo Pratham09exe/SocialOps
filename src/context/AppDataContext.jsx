@@ -29,13 +29,14 @@ export const useAppData = () => useContext(AppDataContext);
 
 export const AppDataProvider = ({ children }) => {
   // Purge legacy demo cache if present on client
-  if (typeof window !== 'undefined' && localStorage.getItem('so_clean_v3') !== 'true') {
+  if (typeof window !== 'undefined' && localStorage.getItem('so_clean_v4') !== 'true') {
     [
       'so_clients', 'so_employees', 'so_approvals', 'so_compliance',
       'so_tasks', 'so_calendar', 'so_invoices', 'so_expenses',
-      'so_activity', 'so_workload', 'so_content_requests'
+      'so_activity', 'so_workload', 'so_content_requests',
+      'so_clean_v3'
     ].forEach(k => localStorage.removeItem(k));
-    localStorage.setItem('so_clean_v3', 'true');
+    localStorage.setItem('so_clean_v4', 'true');
   }
 
   // Primary datasets initialized with clean defaults
@@ -209,7 +210,8 @@ export const AppDataProvider = ({ children }) => {
     if (!token) return;
     try {
       const data = await approvalsApi.getApprovals();
-      if (Array.isArray(data) && data.length > 0) {
+      // Always sync with backend (including empty array) to prevent stale localStorage cache
+      if (Array.isArray(data)) {
         setApprovals(data);
       }
     } catch (err) {
